@@ -28,7 +28,7 @@ TEST(Parallel_Operations_MPI, test_paralell_3x4) {
         }
     }
 }
-//TEST(Parallel_Operations_MPI, test_equality_sequential_parallel) {
+// TEST(Parallel_Operations_MPI, test_equality_sequential_parallel) {
 //    int rank;
 //    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 //    std::vector<double> global_vec;
@@ -50,9 +50,9 @@ TEST(Parallel_Operations_MPI, test_paralell_3x4) {
 //            EXPECT_NEAR(parallel_vec[i], sequential_vec[i], 0.0001);
 //        }
 //    }
-//}
+// }
 //
-//TEST(Parallel_Operations_MPI, Test_size_below_zero) {
+// TEST(Parallel_Operations_MPI, Test_size_below_zero) {
 //    int rank;
 //    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 //    std::vector<double> global_vec;
@@ -70,8 +70,8 @@ TEST(Parallel_Operations_MPI, test_paralell_3x4) {
 //            ASSERT_ANY_THROW(global_vec = gaussianParallel(global_vec, m, n));
 //        }
 //    }
-//}
-//TEST(Parallel_Operations_MPI, test_exception_infinity) {
+// }
+// TEST(Parallel_Operations_MPI, test_exception_infinity) {
 //    int rank;
 //    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 //    std::vector<double> global_vec;
@@ -87,8 +87,8 @@ TEST(Parallel_Operations_MPI, test_paralell_3x4) {
 //            ASSERT_ANY_THROW(global_vec = gaussianParallel(global_vec, m, n));
 //        }
 //    }
-//}
-//TEST(Parallel_Operations_MPI, test_exception_no_solution) {
+// }
+// TEST(Parallel_Operations_MPI, test_exception_no_solution) {
 //    int rank;
 //    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 //    std::vector<double> global_vec;
@@ -105,8 +105,8 @@ TEST(Parallel_Operations_MPI, test_paralell_3x4) {
 //            ASSERT_ANY_THROW(global_vec = gaussianParallel(global_vec, m, n));
 //        }
 //    }
-//}
-//TEST(Parallel_Operations_MPI, Test_correct_Size) {
+// }
+// TEST(Parallel_Operations_MPI, Test_correct_Size) {
 //    int rank;
 //    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 //    std::vector<int> global_vec;
@@ -119,7 +119,7 @@ TEST(Parallel_Operations_MPI, test_paralell_3x4) {
 //    if (rank == 0) {
 //        ASSERT_EQ(matr_size, global_vec.size());
 //    }
-//}
+// }
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
     MPI_Init(&argc, &argv);
