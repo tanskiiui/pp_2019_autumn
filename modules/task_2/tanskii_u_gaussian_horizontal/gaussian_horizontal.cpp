@@ -72,8 +72,6 @@ std::vector<double> gaussianParallel(const std::vector <double> &matrix, int m, 
         tmp = delta_lines + 1;
     }
     std::vector<double> local_vec(tmp * n);
-    if (local_vec.size() == 0)
-        local_vec.resize(1);
     std::vector<int> proc_elems(size);
     std::vector<int> proc_offset(size);
     proc_offset[0] = 0;
