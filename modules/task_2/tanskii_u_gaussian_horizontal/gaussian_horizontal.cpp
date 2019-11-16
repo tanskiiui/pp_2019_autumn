@@ -130,5 +130,4 @@ std::vector<double> gaussianParallel(const std::vector <double> &matrix, int m, 
         }
     }
     return result_vec;
-
 }
