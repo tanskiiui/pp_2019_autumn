@@ -19,6 +19,7 @@ TEST(Parallel_Operations_MPI, test_paralell_3x4) {
         -3, -24, 5, -86,
         1, 3, -5, 27
     };
+    reference_vec.resize(m);
     result_vec.resize(m);
     result_vec = gaussianParallel(global_vec, m, n);
     reference_vec = { -2.0, 3.0, -4.0 };
