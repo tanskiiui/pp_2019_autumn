@@ -11,17 +11,18 @@ TEST(Parallel_Operations_MPI, test_paralell_3x4) {
     std::vector<double> reference_vec;
     std::vector<double> result_vec;
 
-    const int m = 3;
-    const int n = 4;
+    int m = 3;
+    int n = 4;
     if (rank == 0)
         global_vec = {
       2, 10, -3, 38,
         -3, -24, 5, -86,
         1,3,-5,27
     };
+    result_vec = gaussianParallel(global_vec, m, n);
     reference_vec = { -2.0,3.0,-4.0};
     if (rank == 0) {
-        result_vec = gaussianParallel(global_vec, m, n);
+        
         for (int i = 0; i < m; i++) {
             EXPECT_NEAR(reference_vec[i],result_vec[i],0.0001);
         }
@@ -42,9 +43,8 @@ TEST(Parallel_Operations_MPI, test_equality_sequential_parallel) {
         -3, -24, 5, -86,
         1,3,-5,27
     };
-    
-    if (rank == 0) {
-        parallel_vec = gaussianParallel(global_vec, m, n);
+    parallel_vec = gaussianParallel(global_vec, m, n);
+    if (rank == 0) { 
         sequential_vec= gaussianSequential(global_vec, m, n);
         for (int i = 0; i < m; i++) {
             EXPECT_NEAR(parallel_vec[i], sequential_vec[i], 0.0001);
@@ -95,7 +95,6 @@ TEST(Parallel_Operations_MPI, test_exception_no_solution) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     std::vector<double> global_vec;
-
     int m = 3;
     int n = 3;
     if(rank==0)
@@ -104,7 +103,6 @@ TEST(Parallel_Operations_MPI, test_exception_no_solution) {
         -3, -24, 5,
         1,2,3
     };
-
     if (rank == 0) {
         for (int i = 0; i < m; i++) {
             ASSERT_ANY_THROW(global_vec = gaussianParallel(global_vec, m, n));
@@ -115,9 +113,9 @@ TEST(Parallel_Operations_MPI, Test_correct_Size) {
 	int rank;
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	std::vector<int> global_vec;
-	const int m = 4;
-	const int n = 5;
-	size_t matr_size = m * n;
+    int m = 4;
+	int n = 5;
+	int matr_size = m * n;
 	if (rank == 0) {
 		global_vec = getRandomMatrix(m, n);
 	}

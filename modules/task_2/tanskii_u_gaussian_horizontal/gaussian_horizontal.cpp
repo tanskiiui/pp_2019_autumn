@@ -5,7 +5,7 @@
 #include <ctime>
 #include <stdexcept>
 #include <algorithm>
-#include "../../../modules/task_1/tanskii_u_gaussian_horizontal/gaussian_horizontal.h"
+#include "../../../modules/task_2/tanskii_u_gaussian_horizontal/gaussian_horizontal.h"
 
 std::vector<int> getRandomMatrix(int m, int n) {
     if (m <= 0 || n <= 0)
@@ -33,9 +33,8 @@ std::vector<double> gaussianSequential(const std::vector<double>& matrix, int m,
     double d = 0;
     std::vector<double> local_matrix(matrix);
     std::vector<double> result_vec(m);
-
     for (int k = 0; k < m; ++k) {
-        
+
         double tmp = local_matrix[k*n + k];
         for (int j = m; j >= k; j--) {
             local_matrix[k*n + j] /= tmp;
@@ -47,21 +46,17 @@ std::vector<double> gaussianSequential(const std::vector<double>& matrix, int m,
             }
         }
     }
-
-    result_vec[m-1]=local_matrix[(m - 1)*n + m];
-   
+    result_vec[m - 1] = local_matrix[(m - 1)*n + m];
     for (int i = m - 2; i >= 0; i--)
     {
-        result_vec[i]=local_matrix[i*n + m];
+        result_vec[i] = local_matrix[i*n + m];
         for (int j = i + 1; j < m; j++)
-            result_vec[i] -= local_matrix[i*n+j] * result_vec[j];
+            result_vec[i] -= local_matrix[i*n + j] * result_vec[j];
     }
-   
     return result_vec;
 }
 
-std::vector<double> gaussianParallel(std::vector <double> &matrix, int m, int n) {
-   
+std::vector<double> gaussianParallel(const std::vector <double> &matrix, int m, int n) {
     if(m<=0 || n<=0)
         throw std::runtime_error("Matrix size <= 0");
     if(m<(n-1))
@@ -71,46 +66,46 @@ std::vector<double> gaussianParallel(std::vector <double> &matrix, int m, int n)
     int size, rank;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    int delta_lines = m / size;
-    int rem = m % size;
+    const int delta_lines = m / size;
+    const int rem = m % size;
     int count_lines= delta_lines;
+    int tmp = delta_lines;
     if (rank < rem) {
-        count_lines = delta_lines + 1;
+        tmp = delta_lines + 1;
     }
-    std::vector<double> local_vec(count_lines * n);
+    std::vector<double> local_vec(tmp * n); 
     std::vector<int> proc_elems(size);
     std::vector<int> proc_offset(size);
     proc_offset[0] = 0;
     for (int i = 0; i < size; ++i) {
-        proc_elems[i] = count_lines * n;
+        if (i < rem) {
+            proc_elems[i] = (delta_lines + 1)*n;
+        }
+        else
+            proc_elems[i] = delta_lines * n;
         if (i)
             proc_offset[i] = (proc_offset[i - 1] + proc_elems[i - 1]);
     }
-
     MPI_Scatterv(matrix.data(), proc_elems.data(), proc_offset.data(),
-        MPI_DOUBLE, &local_vec[0], count_lines * n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
+        MPI_DOUBLE, &local_vec[0], tmp * n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     std::vector<double> leader_row(n);
-
     for (int i = 0; i < proc_offset[rank] / n; i++) {
         int root = 0;
         int sum = 0;
         for (int j = 0; j < size; ++j, ++root) {
             sum += proc_elems[j] / n;
             if (i < sum) {
-                root = j; 
+                root = j;
                 break;
             }
         }
         MPI_Bcast(&leader_row[0], n, MPI_DOUBLE, root, MPI_COMM_WORLD);
-
         for (int j = 0; j < proc_elems[rank] / n; j++) {
             double d = leader_row[i] / local_vec[j * n + i];
             for (int k = i; k < n; ++k)
                 local_vec[j * n + k] = d * local_vec[j * n + k] - leader_row[k];
         }
     }
-
     for (int i = 0; i < proc_elems[rank] / n; ++i) {
         for (int j = 0; j < n; ++j)
             leader_row[j] = local_vec[i * n + j];
@@ -121,23 +116,20 @@ std::vector<double> gaussianParallel(std::vector <double> &matrix, int m, int n)
                 local_vec[j * n + k] = s * local_vec[j * n + k] - leader_row[k];
         }
     }
-
-    std::vector<double> tmp(0);
+    std::vector<double> tmp_vec(0);
     if (rank == 0) 
-        tmp.resize(m * n);
-    MPI_Gatherv(local_vec.data(), count_lines * n, MPI_DOUBLE, tmp.data(),
+        tmp_vec.resize(m * n);
+    MPI_Gatherv(local_vec.data(), tmp * n, MPI_DOUBLE, tmp_vec.data(),
         proc_elems.data(), proc_offset.data(), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
     std::vector<double> result_vec(0);
     if (rank == 0) {
         result_vec.resize(m);
         for (int i = m - 1; i >= 0; --i) {
-            double B = tmp[i * n + n - 1];
+            double B = tmp_vec[i * n + n - 1];
             for (int j = m - 1; j >= i + 1; --j)
-                B -= tmp[i * n + j] * result_vec[j];
-            result_vec[i] = B / tmp[i * n + i];
+                B -= tmp_vec[i * n + j] * result_vec[j];
+            result_vec[i] = B / tmp_vec[i * n + i];
         }
     }
     return result_vec;
 }
-
