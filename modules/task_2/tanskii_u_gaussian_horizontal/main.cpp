@@ -113,7 +113,7 @@ TEST(Parallel_Operations_MPI, Test_correct_Size) {
     std::vector<int> global_vec;
     int m = 4;
     int n = 5;
-    int matr_size = m * n;
+    size_t matr_size = m * n;
     if (rank == 0) {
         global_vec = getRandomMatrix(m, n);
     }
