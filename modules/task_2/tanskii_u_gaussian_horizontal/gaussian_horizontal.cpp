@@ -30,7 +30,6 @@ std::vector<double> gaussianSequential(const std::vector<double>& matrix, int m,
         throw std::runtime_error("Infinitity solution or doesn't sovmestna");
     if (m > (n - 1))
         throw std::runtime_error("System have no solution");
-    double d = 0;
     std::vector<double> local_matrix(matrix);
     std::vector<double> result_vec(m);
     for (int k = 0; k < m; ++k) {
@@ -66,12 +65,13 @@ std::vector<double> gaussianParallel(const std::vector <double> &matrix, int m, 
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     const int delta_lines = m / size;
     const int rem = m % size;
-    int count_lines = delta_lines;
     int tmp = delta_lines;
     if (rank < rem) {
         tmp = delta_lines + 1;
     }
     std::vector<double> local_vec(tmp * n);
+    if (local_vec.size() == 0)
+        local_vec.resize(1);
     std::vector<int> proc_elems(size);
     std::vector<int> proc_offset(size);
     proc_offset[0] = 0;
@@ -113,6 +113,17 @@ std::vector<double> gaussianParallel(const std::vector <double> &matrix, int m, 
             for (int k = i + proc_offset[rank] / n; k < n; ++k)
                 local_vec[j * n + k] = s * local_vec[j * n + k] - leader_row[k];
         }
+    }
+    int root = 0;
+    for (int i = proc_offset[rank] / n + proc_elems[rank] / n; i < m; ++i) {
+        int sum = 0;
+        for (int j = 0; j < size; ++j, ++root) {
+            sum += proc_elems[j] / n;
+            if (i < sum) {
+                root = j; break;
+            }
+        }
+        MPI_Bcast(&leader_row[0], n, MPI_DOUBLE, root, MPI_COMM_WORLD);
     }
     std::vector<double> tmp_vec(0);
     if (rank == 0)

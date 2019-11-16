@@ -19,6 +19,8 @@ TEST(Parallel_Operations_MPI, test_paralell_3_x4) {
         -3, -24, 5, -86,
         1, 3, -5, 27
     };
+    reference_vec.resize(m);
+    result_vec.resize(m);
     result_vec = gaussianParallel(global_vec, m, n);
     reference_vec = { -2.0, 3.0, -4.0 };
     if (rank == 0) {
@@ -111,7 +113,7 @@ TEST(Parallel_Operations_MPI, Test_correct_Size) {
     std::vector<int> global_vec;
     int m = 4;
     int n = 5;
-    int matr_size = m * n;
+    size_t matr_size = m * n;
     if (rank == 0) {
         global_vec = getRandomMatrix(m, n);
     }
