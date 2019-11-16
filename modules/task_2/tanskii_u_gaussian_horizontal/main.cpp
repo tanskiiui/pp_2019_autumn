@@ -4,7 +4,7 @@
 #include <vector>
 #include "./gaussian_horizontal.h"
 
-TEST(Parallel_Operations_MPI, test_paralell_3x4) {
+TEST(Parallel_Operations_MPI, test_paralell_3_x4) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     std::vector<double> global_vec;
