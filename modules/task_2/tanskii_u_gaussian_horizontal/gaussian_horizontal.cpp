@@ -78,8 +78,9 @@ std::vector<double> gaussianParallel(const std::vector <double> &matrix, int m, 
     for (int i = 0; i < size; ++i) {
         if (i < rem) {
             proc_elems[i] = (delta_lines + 1)*n;
-        } else
+        } else {
             proc_elems[i] = delta_lines * n;
+        }
         if (i)
             proc_offset[i] = (proc_offset[i - 1] + proc_elems[i - 1]);
     }
@@ -129,4 +130,5 @@ std::vector<double> gaussianParallel(const std::vector <double> &matrix, int m, 
         }
     }
     return result_vec;
+
 }
