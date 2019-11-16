@@ -114,6 +114,17 @@ std::vector<double> gaussianParallel(const std::vector <double> &matrix, int m, 
                 local_vec[j * n + k] = s * local_vec[j * n + k] - leader_row[k];
         }
     }
+    int root = 0;
+    for (int i = proc_offset[rank] / n + proc_elems[rank] / n; i < m; ++i) {
+        int sum = 0;
+        for (int j = 0; j < size; ++j, ++root) {
+            sum += proc_elems[j] / n;
+            if (i < sum) {
+                root = j; break;
+            }
+        }
+        MPI_Bcast(&leader_row[0], n, MPI_DOUBLE, root, MPI_COMM_WORLD);
+    }
     std::vector<double> tmp_vec(0);
     if (rank == 0)
         tmp_vec.resize(m * n);
