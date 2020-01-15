@@ -53,7 +53,7 @@ TEST(Parallel_Operations_MPI, test_check_vec_size) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     std::vector<double> global_vec;
-    int n = 50;
+    size_t n = 50;
     if (rank == 0) {
         global_vec = getRandomArray(n);
         EXPECT_EQ(global_vec.size(), n);
