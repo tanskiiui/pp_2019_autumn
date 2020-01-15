@@ -7,7 +7,7 @@
 #include <algorithm>
 #include "../../../modules/task_3/tanskii_u_radix_batcher_float/radix_batcher_float.h"
 
-std::vector<double> getRandomArray(const int size) {
+std::vector<double> getRandomArray(int size) {
     if (size <= 0)
         throw std::runtime_error("vec size<=0");
     std::vector<double> randVec(size);
