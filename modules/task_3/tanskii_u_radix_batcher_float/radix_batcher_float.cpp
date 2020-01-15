@@ -148,14 +148,14 @@ std::vector<double> ParralelRadixSortBatcherMerge(std::vector<double> data, int 
                     else
                         recdata[k] = recdata2[j++];
                 }
-            }
-        } else {
-            int i, j, k;
-            for (i = j = k = localn - 1; k >= 0; k--) {
-                if (j == -1 || (i >= 0 && temp[i] >= recdata2[j]))
-                    recdata[k] = temp[i--];
-                else
-                    recdata[k] = recdata2[j--];
+            } else {
+                int i, j, k;
+                for (i = j = k = localn - 1; k >= 0; k--) {
+                    if (j == -1 || (i >= 0 && temp[i] >= recdata2[j]))
+                        recdata[k] = temp[i--];
+                    else
+                        recdata[k] = recdata2[j--];
+                }
             }
         }
     }
