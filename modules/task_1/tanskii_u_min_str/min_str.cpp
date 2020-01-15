@@ -21,22 +21,18 @@ std::vector<int> getRandomMatrix(int m, int n) {
   return matrix;
 }
 std::vector<int> getMinValInMatrix(const std::vector<int>& matrix, int m, int n) {
-  if (m <= 0 || n <= 0) {
-    throw std::runtime_error("Matrix size <= 0");
-  }
-  std::vector<int> result_vec;
-  for (int i = 0; i < m; i++) {
-    int first_elem_row = i * n;
-    int last_elem_row = (i + 1) * n;
-    int min = matrix[first_elem_row];
-    for (int j = first_elem_row; j < last_elem_row; j++) {
-      if (matrix[j] < min) {
-        min = matrix[j];
-      }
+    if (m <= 0 || n <= 0) {
+        throw std::runtime_error("Matrix size <= 0");
     }
-    result_vec.push_back(min);
+    std::vector<int> result_vec;
+    for (int i = 0; i < m; i++) {
+        int first_elem_row = i * n;
+        int last_elem_row = (i + 1) * n;
+        int min = matrix[first_elem_row];
+        min = *std::min_element(matrix.begin() + first_elem_row, matrix.begin() + last_elem_row);
+        result_vec.push_back(min);
     }
-  return result_vec;
+    return result_vec;
 }
 std::vector<int> getParallelMinInMatrix(const std::vector<int>& matrix, int m, int n) {
   if (m <= 0 || n <= 0) {
