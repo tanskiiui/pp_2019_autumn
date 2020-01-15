@@ -23,7 +23,7 @@ std::vector<double> getRandomArray(const int size) {
 void SetCounters(int* counters, int i, int* sum) {
     int tmp = counters[i];
     counters[i] = *sum;
-    sum += tmp;
+    *sum += tmp;
 }
 void RSort(param* p, int size, int offset) {
     unsigned char* rmemory = (unsigned char*)p->vec.data();
