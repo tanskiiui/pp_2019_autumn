@@ -56,13 +56,13 @@ TEST(Parallel_Operations_MPI, test_check_vec_size) {
         EXPECT_EQ(global_vec.size(), n);
     }
 }
-TEST(Parallel_Operations_MPI, test_paralell_large_size) {
+TEST(Parallel_Operations_MPI, test_paralell_eq) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     std::vector<double> parallel_vec;
     std::vector<double> seq_vec;
     std::vector<double> global_vec;
-    int n = 1000;
+    int n = 10;
     global_vec = getRandomArray(n);
     seq_vec = RadixSort(global_vec, n);
     parallel_vec = ParralelRadixSortBatcherMerge(global_vec, n);
