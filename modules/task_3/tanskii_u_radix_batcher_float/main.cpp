@@ -56,19 +56,19 @@ TEST(Parallel_Operations_MPI, test_check_vec_size) {
         EXPECT_EQ(global_vec.size(), n);
     }
 }
-TEST(Parallel_Operations_MPI, test_paralell_eq) {
+TEST(Parallel_Operations_MPI, test_correct_ans) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     std::vector<double> parallel_vec;
-    std::vector<double> seq_vec;
     std::vector<double> global_vec;
-    int n = 10;
-    global_vec = getRandomArray(n);
-    seq_vec = RadixSort(global_vec, n);
+    std::vector<double> correct_vec;
+    int n = 12;
+    global_vec = { 3.5, 2.4, 7.8, 4.5, 1.2, 5.7, 3.8, 4.9, 9, 10, 11.5, 13.2 };
+    correct_vec = { 1.2, 2.4, 3.5, 3.8, 4.5, 4.9, 5.7, 7.8, 9, 10, 11.5, 13.2 };
     parallel_vec = ParralelRadixSortBatcherMerge(global_vec, n);
     if (rank == 0) {
         for (int i = 0; i < n; i++) {
-            EXPECT_EQ(seq_vec[i], parallel_vec[i]);
+            EXPECT_EQ(correct_vec[i], parallel_vec[i]);
         }
     }
 }
