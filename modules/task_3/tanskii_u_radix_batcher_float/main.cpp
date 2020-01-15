@@ -11,8 +11,7 @@ TEST(Parallel_Operations_MPI, test_paralell_eq_seq) {
     std::vector<double> seq_vec;
     std::vector<double> global_vec;
     int n = 8;
-    if (rank == 0)
-        global_vec = { 3.5, 2.4, 7.8, 4.5, 1.2, 5.7, 3.8, 4.9 };
+    global_vec = { 3.5, 2.4, 7.8, 4.5, 1.2, 5.7, 3.8, 4.9 };
     seq_vec = RadixSort(global_vec, n);
     parallel_vec = ParralelRadixSortBatcherMerge(global_vec, n);
     if (rank == 0) {
@@ -38,10 +37,8 @@ TEST(Parallel_Operations_MPI, test_correct_ans) {
     std::vector<double> global_vec;
     std::vector<double> correct_vec;
     int n = 8;
-    if (rank == 0) {
-        global_vec = { 3.5, 2.4, 7.8, 4.5, 1.2, 5.7, 3.8, 4.9 };
-        correct_vec = { 1.2, 2.4, 3.5, 3.8, 4.5, 4.9, 5.7, 7.8 };
-    }
+    global_vec = { 3.5, 2.4, 7.8, 4.5, 1.2, 5.7, 3.8, 4.9 };
+    correct_vec = { 1.2, 2.4, 3.5, 3.8, 4.5, 4.9, 5.7, 7.8 };
     parallel_vec = ParralelRadixSortBatcherMerge(global_vec, n);
     if (rank == 0) {
         for (int i = 0; i < n; i++) {
@@ -66,10 +63,8 @@ TEST(Parallel_Operations_MPI, correct_sort_negatives) {
     std::vector<double> global_vec;
     std::vector<double> correct_vec;
     int n = 8;
-    if (rank == 0) {
-        global_vec = { 3.5, -2.4, 7.8, -4.5, 1.2, -5.7, 3.8, 4.9 };
-        correct_vec = { -5.7, -4.5, -2.4, 1.2, 3.5, 3.8, 4.9, 7.8 };
-    }
+    global_vec = { 3.5, -2.4, 7.8, -4.5, 1.2, -5.7, 3.8, 4.9 };
+    correct_vec = { -5.7, -4.5, -2.4, 1.2, 3.5, 3.8, 4.9, 7.8 };
     parallel_vec = ParralelRadixSortBatcherMerge(global_vec, n);
     if (rank == 0) {
         for (int i = 0; i < n; i++) {

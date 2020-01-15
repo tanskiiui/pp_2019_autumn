@@ -96,7 +96,7 @@ std::vector<double> ParralelRadixSortBatcherMerge(std::vector<double> data, int 
     localn = avgn;
     recdata.resize(localn);
     if (n < size) {
-        RadixSort(recdata, n);
+        recdata = RadixSort(recdata, n);
         return recdata;
     }
     if (rank == 0) {
