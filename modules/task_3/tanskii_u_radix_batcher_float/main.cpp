@@ -56,7 +56,7 @@ TEST(Parallel_Operations_MPI, test_check_vec_size) {
         EXPECT_EQ(global_vec.size(), n);
     }
 }
-TEST(Parallel_Operations_MPI, test_correct_ans) {
+TEST(Parallel_Operations_MPI, test_correct_eq) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     std::vector<double> parallel_vec;
