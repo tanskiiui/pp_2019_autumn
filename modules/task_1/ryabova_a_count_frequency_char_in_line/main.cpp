@@ -5,49 +5,21 @@
 #include <string>
 #include "./count_frequency.h"
 
-TEST(count_frequency, count_frequency_in_random_str) {
+TEST(count_frequency, even_number_of_char) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    std::string str = getRandomString(5000);
+
+    std::string str = "ariana";
     char c = 'a';
 
     int count = getCountCharInStr(str, c);
 
     if (rank == 0) {
-       int count2 = getCount(str, c);
-       ASSERT_EQ(count2, count);
+        ASSERT_EQ(3, count);
     }
 }
 
-TEST(count_frequency, count_frequency_in_str_with_one_char) {
-    int rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
-    std::string str = "aaaaaaaaaaa";
-    char c = 'a';
-
-    int count = getCountCharInStr(str, c);
-
-    if (rank == 0) {
-        ASSERT_EQ(11, count);
-    }
-}
-
-TEST(count_frequency, count_frequency_in_str_without_char) {
-    int rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
-    std::string str = "sdfghjkl";
-    char c = 'a';
-
-    int count = getCountCharInStr(str, c);
-
-    if (rank == 0) {
-        ASSERT_EQ(0, count);
-    }
-}
-
-TEST(count_frequency, count_frequency_in_odd_str) {
+TEST(count_frequency, odd_number_of_char) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
@@ -61,17 +33,45 @@ TEST(count_frequency, count_frequency_in_odd_str) {
     }
 }
 
-TEST(count_frequency, count_frequency_in_even_str) {
+TEST(count_frequency, all_char_needed) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    std::string str = "ariana";
+    std::string str = "aaaaaaaaaaa";
     char c = 'a';
 
     int count = getCountCharInStr(str, c);
 
     if (rank == 0) {
-        ASSERT_EQ(3, count);
+        ASSERT_EQ(11, count);
+    }
+}
+
+TEST(count_frequency, no_char_needed) {
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    std::string str = "sdfghjkl";
+    char c = 'a';
+
+    int count = getCountCharInStr(str, c);
+
+    if (rank == 0) {
+        ASSERT_EQ(0, count);
+    }
+}
+
+TEST(count_frequency, number_search) {
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    std::string str = "sdfghjkl12421";
+    char c = '1';
+
+    int count = getCountCharInStr(str, c);
+
+    if (rank == 0) {
+        ASSERT_EQ(2, count);
     }
 }
 
