@@ -16,7 +16,7 @@ TEST(Parallel_Operations_MPI, test_paralell_eq_seq) {
     parallel_vec = ParralelRadixSortBatcherMerge(global_vec, n);
     if (rank == 0) {
         for (int i = 0; i < n; i++) {
-            EXPECT_EQ(global_vec[i], parallel_vec[i]);
+            EXPECT_EQ(seq_vec[i], parallel_vec[i]);
         }
     }
 }
