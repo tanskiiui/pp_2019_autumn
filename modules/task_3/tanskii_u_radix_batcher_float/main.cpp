@@ -1,7 +1,6 @@
 // Copyright 2019 Tanskii Yuriy
-#include"pch.h"
-#include <gtest-mpi-listener.hpp>
 #include <gtest/gtest.h>
+#include <gtest-mpi-listener.hpp>
 #include <vector>
 #include "../../../modules/task_3/tanskii_u_radix_batcher_float/radix_batcher_float.h"
 
@@ -79,15 +78,6 @@ TEST(Parallel_Operations_MPI, correct_sort_negatives) {
     }
 }
 int main(int argc, char** argv) {
-   
-    /*MPI_Init(&argc, &argv);
-
-    std::vector<double> v;
-    v = getRandomArray(8);
-    v = ParralelRadixSortBatcherMerge(v, 8);
-
-    MPI_Finalize();
-    return 0;*/
     ::testing::InitGoogleTest(&argc, argv);
     MPI_Init(&argc, &argv);
     ::testing::AddGlobalTestEnvironment(new GTestMPIListener::MPIEnvironment);

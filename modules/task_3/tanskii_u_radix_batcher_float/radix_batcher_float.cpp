@@ -1,5 +1,4 @@
 // Copyright 2019 Tanskii Yuriy
-#include"pch.h"
 #include <mpi.h>
 #include <vector>
 #include <random>
@@ -21,15 +20,11 @@ std::vector<double> getRandomArray(const int size) {
     }
     return randVec;
 }
-void SetCounters(int* counters, int i, int& sum) {
+void SetCounters(int* counters, int i, int* sum) {
     int tmp = counters[i];
-    counters[i] = sum;
+    counters[i] = *sum;
     sum += tmp;
 }
-//void Restores(std::vector<double>& dst, int* counters, unsigned char* rmemory, int index, int i, std::vector<double>& vec) {
-//    dst[counters[rmemory[index]]] = vec[i];
-//    counters[rmemory[index]]++;
-//}
 void RSort(param* p, int size, int offset) {
     unsigned char* rmemory = (unsigned char*)p->vec.data();
     int counters[256];
@@ -39,11 +34,10 @@ void RSort(param* p, int size, int offset) {
     for (int i = 0; i < size; i++)
         counters[rmemory[8 * i + offset]]++;
     for (int i = 0; i < 256; i++) {
-        SetCounters(counters, i, sum);
+        SetCounters(counters, i, &sum);
     }
     for (int i = 0; i < size; i++) {
-        int index = 8 * i + offset;
-        //Restores(dst, counters, rmemory, index, i, vec);
+        int index = 8 * i + offset;       
         p->dst[counters[rmemory[index]]] = p->vec[i];
         counters[rmemory[index]]++;
     }
@@ -58,16 +52,14 @@ void RSortLast(param* p, int size, int offset) {
         sum = counters[i];
     }
     for (int i = 0; i < 128; i++) {
-        SetCounters(counters, i, sum);
+        SetCounters(counters, i, &sum);
     }
     for (int i = 0; i < size; i++) {
         int index = 8 * i + offset;
-        if (rmemory[index] < 128) {
-            //Restores(dst, counters, rmemory, index, i, vec);
+        if (rmemory[index] < 128) {          
             p->dst[counters[rmemory[index]]] = p->vec[i];
             counters[rmemory[index]]++;
-        }
-        else {
+        } else {
             counters[rmemory[index]]--;
             p->dst[counters[rmemory[index]]] = p->vec[i];
         }
@@ -118,7 +110,7 @@ std::vector<double> ParralelRadixSortBatcherMerge(std::vector<double> data, int 
         MPI_Status status;
         MPI_Recv(&recdata[0], localn, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, &status);
     }
-    recdata=RadixSort(recdata, localn);
+    recdata = RadixSort(recdata, localn);
     int oddrank, evenrank;
     if (rank % 2 == 0) {
         oddrank = rank - 1;
@@ -166,4 +158,5 @@ std::vector<double> ParralelRadixSortBatcherMerge(std::vector<double> data, int 
     }
     MPI_Gather(&recdata[0], localn, MPI_DOUBLE, &data.front(), localn, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     return data;
+
 }
