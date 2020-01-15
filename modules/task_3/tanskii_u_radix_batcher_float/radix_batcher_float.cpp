@@ -37,7 +37,7 @@ void RSort(param* p, int size, int offset) {
         SetCounters(counters, i, &sum);
     }
     for (int i = 0; i < size; i++) {
-        int index = 8 * i + offset;       
+        int index = 8 * i + offset;
         p->dst[counters[rmemory[index]]] = p->vec[i];
         counters[rmemory[index]]++;
     }
@@ -56,7 +56,7 @@ void RSortLast(param* p, int size, int offset) {
     }
     for (int i = 0; i < size; i++) {
         int index = 8 * i + offset;
-        if (rmemory[index] < 128) {          
+        if (rmemory[index] < 128) {
             p->dst[counters[rmemory[index]]] = p->vec[i];
             counters[rmemory[index]]++;
         } else {
@@ -137,14 +137,17 @@ std::vector<double> ParralelRadixSortBatcherMerge(std::vector<double> data, int 
         for (i = 0; i < localn; i++) {
             temp[i] = recdata[i];
         }
-        if (status.MPI_SOURCE == MPI_PROC_NULL)	continue;
-        else if (rank < status.MPI_SOURCE) {
-            int i, j, k;
-            for (i = j = k = 0; k < localn; k++) {
-                if (j == localn || (i < localn && temp[i] < recdata2[j]))
-                    recdata[k] = temp[i++];
-                else
-                    recdata[k] = recdata2[j++];
+        if (status.MPI_SOURCE == MPI_PROC_NULL) {
+            continue;
+        } else {
+            if (rank < status.MPI_SOURCE) {
+                int i, j, k;
+                for (i = j = k = 0; k < localn; k++) {
+                    if (j == localn || (i < localn && temp[i] < recdata2[j]))
+                        recdata[k] = temp[i++];
+                    else
+                        recdata[k] = recdata2[j++];
+                }
             }
         } else {
             int i, j, k;
@@ -158,5 +161,4 @@ std::vector<double> ParralelRadixSortBatcherMerge(std::vector<double> data, int 
     }
     MPI_Gather(&recdata[0], localn, MPI_DOUBLE, &data.front(), localn, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     return data;
-
 }
