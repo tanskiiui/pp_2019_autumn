@@ -87,7 +87,6 @@ std::vector<double> ParralelRadixSortBatcherMerge(std::vector<double> data, int 
     std::vector<double> recdata2;
     std::vector<double> temp;
     int i;
-    int root_process;
     MPI_Status status;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
